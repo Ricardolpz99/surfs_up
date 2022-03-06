@@ -15,6 +15,9 @@ from flask import Flask, jsonify
 import app
 engine = create_engine("sqlite:///hawaii.sqlite")
 Base = automap_base()
+Base.prepare(engine, reflect=True)
+Measurement = Base.classes.measurement
+Station = Base.classes.station
 session = Session(engine)
 app = Flask(__name__)
 @app.route("/")
@@ -64,4 +67,3 @@ def stats(start=None, end=None):
         filter(Measurement.date <= end).all()
     temps = list(np.ravel(results))
     return jsonify(temps)
-    
